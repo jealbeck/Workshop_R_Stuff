@@ -169,5 +169,246 @@ sd(centered)
 all.equal(sd(dat[,4]), sd(centered))
 
 
+read.csv(file = "data/commadec.txt", sep = ";", dec = ",")
+
+center <- function(data, midpoint = 0){
+  #returns a new vector containing the original data centered around the new midpoint
+  #Example: center(c(1,2,3),0) --> c(-1,0,1)
+  new_data <- (data - mean(data)) + midpoint
+  return(new_data)
+}
+
+
+analyze <- function(filename){
+  #Generate mean, min, and max plots for given file
+  #file must be csv with no headers
+  
+  #read in the file
+  data_to_analyze <- read.csv(file = filename, header = FALSE)
+  
+  #plot mean data
+  plot(apply(data_to_analyze, 2, mean), ylab = "Mean", xlab = "Day")
+  
+  #plot min data
+  plot(apply(data_to_analyze, 2, min), ylab = "Min", xlab = "Day")
+  
+  #plot max data
+  plot(apply(data_to_analyze, 2, max), ylab = "Max", xlab = "Day")
+
+}
+
+analyze("data/inflammation-03.csv")
+
+best_practice <- c("Let", "the", "computer", "do", "the", "work")
+
+print_words <- function(sentence){
+  for (word in sentence) {
+    print(word)
+  }
+}
+
+print_words(best_practice)
+
+
+vec_len <- 0
+vowels <- c("a", "e", "i", "o", "u")
+for (v in vowels) {
+  print(v)
+  vec_len <- vec_len + 1
+  print(vec_len)
+}
+
+print("Vector Length:")
+print(vec_len)
+
+print(length(vowels))
+
+
+print_N <- function(N){
+  #Prints the first N natural numbers, one per line
+  #Usage: print_N(N)
+  
+  #loop through set to print each number once per line
+  for (number in seq(1,N)) {
+    print(number)
+  }
+}
+
+print_N(40)
+
+
+total <- function(sum_data){
+  #Sums the values of a vector
+  
+  #initialize variable for answer
+  result <- 0
+  
+  #add everything line by line
+  for (num in sum_data) {
+    result <- result + num
+  }
+  
+  return(result)
+}
+
+total(c(4,8,15,16,23,42))
+
+
+list.files()
+list.files(path = "data")
+list.files(path = "data", pattern = "csv")
+list.files(path = "data", pattern = "inflammation")
+list.files(path = "data", pattern = "inflammation", full.names = TRUE)
+
+
+analyze_all <- function(data_path, pattern){
+  #apply analyze function to all files in data_path with given pattern
+  
+  #Make list of files
+  file_set <- list.files(path = data_path, pattern = pattern, full.names = TRUE)
+  
+  #Apply analyze to list
+  for (file in file_set) {
+    print("Now Analyzing file:")
+    print(file)
+    analyze(file)
+  }
+}
+
+analyze_all("data","inflammation")
+
+
+a <- 37
+a > 100
+a < 100
+a <= 100
+a >= 37
+
+
+a <- 84769
+if (a > 100){
+  print("a is greater than")
+}else{
+  print("a is less than")
+}
+print("complete")
+
+
+if (a >= 99){
+  print("a is greater than or equal to")
+}
+print("Done")
+
+
+a <- -3.14
+if (a > 0){
+  print(1)
+}else if (a == 0){
+  print(0)
+}else{
+  print(-1)
+}
+
+
+#AND && True only if both are true
+if (1 > 0 && -1 > 0){
+  print("Both are true")
+}else{
+  print("Not all are true")
+}
+
+
+#OR || True if at least one arg is true
+if (1 > 0 || -1 > 0){
+  print("At least there is some truth!")
+}else{
+  print("There is no truth!")
+}
+
+
+a <- 12
+a == NA
+if (a == NA){ #Fails because "NA" is non-existent
+  print("Coconut")
+}
+
+
+if (is.na(a)){ #poor example
+  print("Coconut")
+}
+
+
+dat <- read.csv("data/inflammation-01.csv", header = FALSE)
+
+plot_dist <- function(plot_data, threshold){
+  #plot a boxplot if the length of vector is greater than the threshold
+  
+  if (length(plot_data) > threshold){
+    boxplot(plot_data)
+  }else{
+    stripchart(plot_data)
+  }
+}
+
+plot_dist(dat[,10],threshold = 10)
+
+boxplot(dat[,10])
+stripchart(dat[,10])
+
+pdf("new_results.pdf")
+analyze("data/inflammation-01.csv")
+dev.off()
+
+
+analyze <- function(filename, output=NULL){
+  #Generate mean, min, and max plots for given file
+  #file must be csv with no headers
+  
+  if (!is.null(output)){
+  pdf(output)
+  }
+  
+  #read in the file
+  data_to_analyze <- read.csv(file = filename, header = FALSE)
+  
+  #plot mean data
+  plot(apply(data_to_analyze, 2, mean), ylab = "Mean", xlab = "Day")
+  
+  #plot min data
+  plot(apply(data_to_analyze, 2, min), ylab = "Min", xlab = "Day")
+  
+  #plot max data
+  plot(apply(data_to_analyze, 2, max), ylab = "Max", xlab = "Day")
+  
+  if (!is.null(output)){
+  dev.off()
+  }
+}
+
+f_input <- "inflammation-01.csv"
+sub("csv","pdf",f_input)
+file.path("results", sub("csv","pdf", f_input))
+
+
+analyze_all <- function(data_path, results_path, patt){
+  #apply analyze function to all files in data_path with given pattern
+  #data_path: where the data is
+  #results: results_path
+  #patt: pattern
+  
+  #Make list of files
+  file_set <- list.files(path = data_path, pattern = patt, full.names = FALSE)
+  
+  #Apply analyze to list
+  for (f in file_set) {
+    print("Now Analyzing file:")
+    print(f)
+    analyze(file.path(data_path, f), file.path(results_path, sub("csv","pdf", f)))
+  }
+}
+
+analyze_all("data","results","inflammation")
+
+
 
           
